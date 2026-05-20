@@ -14,7 +14,7 @@ public class Appliance {
 
     private boolean m_poweredOn = false;
 
-    private Instant m_poweredOnTime = null;
+    private Instant m_poweredOnTimestamp = null;
 
     private Duration m_totalTurnedOnDuration = Duration.ZERO;
 
@@ -38,14 +38,14 @@ public class Appliance {
 
     public void TurnOn() {
         m_poweredOn = true;
-        m_poweredOnTime = Instant.now();
+        m_poweredOnTimestamp = Instant.now();
     }
 
     public void TurnOff() {
         if (!m_poweredOn) {
             return;
         }
-        m_totalTurnedOnDuration = m_totalTurnedOnDuration.plus(Duration.between(m_poweredOnTime, Instant.now()));
+        m_totalTurnedOnDuration = m_totalTurnedOnDuration.plus(Duration.between(m_poweredOnTimestamp, Instant.now()));
         m_poweredOn = false;
     }
 
@@ -61,7 +61,7 @@ public class Appliance {
         if (!m_poweredOn) {
             return Duration.ZERO;
         }
-        return Duration.between(m_poweredOnTime,  Instant.now());
+        return Duration.between(m_poweredOnTimestamp,  Instant.now());
     }
 
     public boolean isPoweredOn() {
