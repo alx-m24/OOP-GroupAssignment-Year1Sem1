@@ -67,4 +67,9 @@ public class Appliance {
     public boolean isPoweredOn() {
         return m_poweredOn;
     }
+
+    public KiloWattHours calculateEnergyConsumed() {
+        double hours = getTotalPoweredOnDuration().getSeconds() / 3600.0;
+        return new KiloWattHours(m_powerRating.getValue() / 1000.0 * hours);
+    }
 }
