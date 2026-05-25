@@ -8,20 +8,16 @@ import java.time.Instant;
 // Base class for every Appliance in the system
 public class Appliance {
     // Private Members for Encapsulation
-    private final String m_name;
-    private final Watts m_powerRating;
-    private final KiloWattHours m_energyConsumption;
+    protected final String m_name;
+    protected final Watts m_powerRating;
 
-    private boolean m_poweredOn = false;
+    protected boolean m_poweredOn = false;
+    protected Instant m_poweredOnTimestamp = null;
+    protected Duration m_totalTurnedOnDuration = Duration.ZERO;
 
-    private Instant m_poweredOnTimestamp = null;
-
-    private Duration m_totalTurnedOnDuration = Duration.ZERO;
-
-    public Appliance(String name, Watts powerRating, KiloWattHours energyConsumption) {
+    public Appliance(String name, Watts powerRating) {
         m_name = name;
         m_powerRating = powerRating;
-        m_energyConsumption = energyConsumption;
     }
 
     public String getName() {
@@ -32,11 +28,8 @@ public class Appliance {
         return m_powerRating;
     }
 
-    public  KiloWattHours getEnergyConsumption() {
-        return m_energyConsumption;
-    }
-
     public void TurnOn() {
+        if (m_poweredOn) return;
         m_poweredOn = true;
         m_poweredOnTimestamp = Instant.now();
     }
