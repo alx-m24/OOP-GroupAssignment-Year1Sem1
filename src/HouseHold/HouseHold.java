@@ -26,6 +26,13 @@ public class HouseHold {
         return true;
     }
 
+    public Appliance getAppliance(String name) {
+        for (int i = 0; i < m_applianceCount; ++i) {
+            if (m_appliances[i].getName().equals(name)) return m_appliances[i];
+        }
+        return null;
+    }
+
     // Uses Polymorphism for each appliance classes
     public double calculateTotalEnergy() {
         double totalEnergy = 0.0;
