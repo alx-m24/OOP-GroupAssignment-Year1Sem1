@@ -17,6 +17,14 @@ public class HouseHold {
         if (appliance == null) {
             return false;
         }
+
+        for (int i = 0; i < m_applianceCount; ++i) {
+            if (m_appliances[i] == null) {
+                m_appliances[i] = appliance;
+                return true;
+            }
+        }
+
         if (m_applianceCount >= MAX_APPLIANCE_NUM) {
             return false;
         }
@@ -31,6 +39,19 @@ public class HouseHold {
             if (m_appliances[i].getName().equals(name)) return m_appliances[i];
         }
         return null;
+    }
+
+    public Boolean hasAppliance(String name) {
+        return getAppliance(name) != null;
+    }
+
+    public void removeAppliance(String name) {
+        for (int i = 0; i < m_applianceCount; ++i) {
+            if (m_appliances[i].getName().equals(name)) {
+                m_appliances[i] = null;
+                break;
+            }
+        }
     }
 
     // Uses Polymorphism for each appliance classes
