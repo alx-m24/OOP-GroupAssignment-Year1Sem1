@@ -2,14 +2,13 @@ package HouseHold;
 
 import Appliances.*;
 
+import java.util.ArrayList;
+
 public class HouseHold {
-    private final int MAX_APPLIANCE_NUM = 100;
-    private Appliance[] m_appliances;
-    private int m_applianceCount; // Tracks the actual number of added appliances
+    ArrayList<Appliance> m_appliances;
 
     public HouseHold() {
-        m_appliances = new Appliance[MAX_APPLIANCE_NUM];
-        m_applianceCount = 0;
+        m_appliances = new ArrayList<>();
     }
 
     // Adds an appliance to the tracker
@@ -18,25 +17,14 @@ public class HouseHold {
             return false;
         }
 
-        for (int i = 0; i < m_applianceCount; ++i) {
-            if (m_appliances[i] == null) {
-                m_appliances[i] = appliance;
-                return true;
-            }
-        }
+        m_appliances.add(appliance);
 
-        if (m_applianceCount >= MAX_APPLIANCE_NUM) {
-            return false;
-        }
-
-        m_appliances[m_applianceCount] = appliance;
-        m_applianceCount++;
         return true;
     }
 
     public Appliance getAppliance(String name) {
-        for (int i = 0; i < m_applianceCount; ++i) {
-            if (m_appliances[i].getName().equals(name)) return m_appliances[i];
+        for (int i = 0; i < m_appliances.size(); ++i) {
+            if (m_appliances.get(i).getName().equals(name)) return m_appliances.get(i);
         }
         return null;
     }
@@ -46,9 +34,9 @@ public class HouseHold {
     }
 
     public void removeAppliance(String name) {
-        for (int i = 0; i < m_applianceCount; ++i) {
-            if (m_appliances[i].getName().equals(name)) {
-                m_appliances[i] = null;
+        for (int i = 0; i < m_appliances.size(); ++i) {
+            if (m_appliances.get(i).getName().equals(name)) {
+                m_appliances.remove(i);
                 break;
             }
         }
@@ -57,8 +45,8 @@ public class HouseHold {
     // Uses Polymorphism for each appliance classes
     public double calculateTotalEnergy() {
         double totalEnergy = 0.0;
-        for (int i = 0; i < m_applianceCount; i++) {
-            totalEnergy += m_appliances[i].calculateEnergyConsumption();
+        for (int i = 0; i < m_appliances.size(); i++) {
+            totalEnergy += m_appliances.get(i).calculateEnergyConsumption();
         }
         return totalEnergy;
     }
@@ -71,11 +59,11 @@ public class HouseHold {
 
     // Getters for Menu/Navigation module to interact with data safely
     public int getApplianceCount() {
-        return m_applianceCount;
+        return m_appliances.size();
     }
 
     // Returns the entire array, but user should only iterate up to m_applianceCount
-    public Appliance[] getAppliances() {
+    public ArrayList<Appliance> getAppliances() {
         return m_appliances;
     }
 }

@@ -4,6 +4,8 @@ package EnergyReport;
 import Appliances.Appliance;
 import HouseHold.HouseHold;
 
+import java.util.ArrayList;
+
 public class HighConsumption {
     HouseHold houseHold;
 
@@ -22,16 +24,16 @@ public class HighConsumption {
         Appliance top2=null;
         Appliance top3=null;
 
-        Appliance[] appliance= houseHold.getAppliances();
+        ArrayList<Appliance> appliance= houseHold.getAppliances();
 
 
-        for(int index=0;index< appliance.length;index++){
+        for(int index=0;index< appliance.size();index++){
 
-            if(appliance[index].calculateEnergyConsumption()==0){
+            if(appliance.get(index).calculateEnergyConsumption()==0){
                 continue;
             }
 
-            if(appliance[index].calculateEnergyConsumption()>high1){
+            if(appliance.get(index).calculateEnergyConsumption()>high1){
 
                 high3=high2;
                 top3=top2;
@@ -39,20 +41,20 @@ public class HighConsumption {
                 high2=high1;
                 top2=top1;
 
-                high1=appliance[index].calculateEnergyConsumption();
-                top1=appliance[index];
+                high1=appliance.get(index).calculateEnergyConsumption();
+                top1=appliance.get(index);
 
-            }else if(appliance[index].calculateEnergyConsumption()>high2){
+            }else if(appliance.get(index).calculateEnergyConsumption()>high2){
                 high3=high2;
                 top3=top2;
 
-                high2=appliance[index].calculateEnergyConsumption();
-                top2=appliance[index];
+                high2=appliance.get(index).calculateEnergyConsumption();
+                top2=appliance.get(index);
 
 
-            } else if(appliance[index].calculateEnergyConsumption()>high3) {
-                high3=appliance[index].calculateEnergyConsumption();
-                top3=appliance[index];
+            } else if(appliance.get(index).calculateEnergyConsumption()>high3) {
+                high3=appliance.get(index).calculateEnergyConsumption();
+                top3=appliance.get(index);
 
             }
 
