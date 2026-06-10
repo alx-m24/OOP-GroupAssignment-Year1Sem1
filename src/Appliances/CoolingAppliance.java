@@ -3,6 +3,7 @@ package Appliances;
 public class CoolingAppliance extends Appliance {
     private double m_efficiencyRating;
 
+
     public CoolingAppliance(String name, double powerRating, double efficiencyRating) {
         super(name, powerRating);
         setEfficiencyRating(efficiencyRating);
@@ -11,6 +12,9 @@ public class CoolingAppliance extends Appliance {
     public double getEfficiencyRating() {
         return m_efficiencyRating;
     }
+
+
+
 
     public void setEfficiencyRating(double efficiencyRating) {
         if (efficiencyRating <= 0) {
