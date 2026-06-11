@@ -14,7 +14,7 @@ public class Main {
             menu.show();
             choice = input.getInt("Enter choice: ");
             menu.handleChoice(choice);
-        } while (choice != 8);
+        } while (choice != 9);
 
         scanner.close();
     }

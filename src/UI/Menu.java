@@ -15,46 +15,61 @@ public class Menu {
 
     public void show() {
         System.out.println("\n===== Household Energy Tracker =====");
-        System.out.println("1. Add Light Appliance");
-        System.out.println("2. Add Cooling Appliance");
-        System.out.println("3. Add Heating Appliance");
-        System.out.println("4. Remove Appliance");
-        System.out.println("5. View Total Energy");
-        System.out.println("6. View Total Cost");
-        System.out.println("7. Analyze energy consumption");
-        System.out.println("8. Exit");
+        System.out.println("1. Add Default Appliance");
+        System.out.println("2. Add Light Appliance");
+        System.out.println("3. Add Cooling Appliance");
+        System.out.println("4. Add Heating Appliance");
+        System.out.println("5. Remove Appliance");
+        System.out.println("6. View Total Energy");
+        System.out.println("7. View Total Cost");
+        System.out.println("8. Analyze energy consumption");
+        System.out.println("9. Exit");
     }
 
     public void handleChoice(int choice) {
         switch (choice) {
             case 1:
-                addLight();
+                addOtherAppliance();
                 break;
             case 2:
-                addCooling();
+                addLight();
                 break;
             case 3:
-                addHeating();
+                addCooling();
                 break;
             case 4:
-                removeAppliance();
+                addHeating();
                 break;
             case 5:
-                System.out.printf("Total energy: %.2f kWh%n", houseHold.calculateTotalEnergy());
+                removeAppliance();
                 break;
             case 6:
+                System.out.printf("Total energy: %.2f kWh%n", houseHold.calculateTotalEnergy());
+                break;
+            case 7:
                 double rate = input.getDouble("Enter tariff rate per kWh: ");
                 System.out.printf("Estimated cost: RM %.2f%n", houseHold.calculateTotalCost(rate));
                 break;
-            case 7:
+            case 8:
                 displayHighConsumption();
                 break;
-            case 8:
+            case 9:
                 System.out.println("Goodbye!");
                 break;
             default:
                 System.out.println("Invalid choice.");
         }
+    }
+
+    private void addOtherAppliance() {
+        input.getText(""); // flush newline
+        String name   = input.getText("Enter appliance name: ");
+        double watts  = input.getDouble("Enter power rating in watts: ");
+        double hours  = input.getDouble("Enter usage hours: ");
+
+        Appliance appliance = new Appliance(name, watts);
+        appliance.setUsageDuration(hours);
+        System.out.println(houseHold.addAppliance(appliance) ? "Appliance added." : "Failed to add appliance.");
     }
 
     private void addLight() {
