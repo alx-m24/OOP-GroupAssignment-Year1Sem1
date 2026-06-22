@@ -1,6 +1,5 @@
 import java.util.Scanner;
 import Appliances.*;
-import EnergyReport.*;
 import HouseHold.HouseHold;
 
 public class Main {
@@ -8,7 +7,6 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         HouseHold houseHold = new HouseHold();
-
 
         int choice;
 
@@ -20,8 +18,7 @@ public class Main {
             System.out.println("4. Remove Appliance");
             System.out.println("5. View Total Energy");
             System.out.println("6. View Total Cost");
-            System.out.println("7. View High Consumers");
-            System.out.println("8. Exit");
+            System.out.println("7. Exit");
 
             choice = getInt(scanner, "Enter choice: ");
 
@@ -54,13 +51,6 @@ public class Main {
                     break;
 
                 case 7:
-                    HighConsumption highConsumption=new HighConsumption(houseHold);
-                    EnergyReport report = new EnergyReport(highConsumption);
-                    report.DisplayReport();
-
-
-                    break;
-                case 8:
                     System.out.println("Goodbye!");
                     break;
 
@@ -68,7 +58,7 @@ public class Main {
                     System.out.println("Invalid choice.");
             }
 
-        } while (choice != 8);
+        } while (choice != 7);
 
         scanner.close();
     }
