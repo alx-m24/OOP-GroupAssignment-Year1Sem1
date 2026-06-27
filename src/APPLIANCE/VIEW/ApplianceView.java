@@ -19,10 +19,12 @@ public class ApplianceView {
     private Scanner scanner;
 
 
-    public ApplianceView() {
-        controller = new HouseholdController();
-        scanner = new Scanner(System.in);
+
+    public ApplianceView(HouseholdController controller) {
+        this.controller = controller;
+        this.scanner = new Scanner(System.in);
     }
+
 
     public void showMenu() {
         int choice;

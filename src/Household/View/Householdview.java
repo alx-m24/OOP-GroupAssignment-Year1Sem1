@@ -13,9 +13,10 @@ import Household.Entity.HouseholdEntity;
         private Scanner scanner;
         private ApplianceController appController;
 
-        public Householdview() {
-            controller = new HouseholdController();
-            scanner = new Scanner(System.in);
+
+        public Householdview(HouseholdController controller) {
+            this.controller = controller;
+            this.scanner = new Scanner(System.in);
         }
 
         public void showMenu() {
@@ -65,7 +66,7 @@ import Household.Entity.HouseholdEntity;
             } while (choice != 0);
         }
 
-        // ✅ ADD household
+        // ADD household
         private void addHousehold() {
 
             System.out.print("Enter Household ID: ");
@@ -80,13 +81,13 @@ import Household.Entity.HouseholdEntity;
             boolean success = controller.addHousehold(id, name, username);
 
             if (success) {
-                System.out.println("✅ Household added successfully!");
+                System.out.println("Household added successfully!");
             } else {
-                System.out.println("❌ Failed (duplicate ID or invalid input)");
+                System.out.println(" Failed (duplicate ID or invalid input)");
             }
         }
 
-        // ✅ VIEW ALL households
+        //  VIEW ALL households
         private void displayAllHouseholds() {
 
             List<HouseholdEntity> list = controller.getAllHouseholds();
@@ -103,8 +104,7 @@ import Household.Entity.HouseholdEntity;
                         + " | Appliances: " + house.getAppliances().size());
             }
         }
-
-        // ✅ SEARCH household
+        // SEARCH household
         private void searchHousehold() {
 
             System.out.print("Enter Household ID: ");
@@ -113,7 +113,7 @@ import Household.Entity.HouseholdEntity;
             HouseholdEntity house = controller.getHousehold(id);
 
             if (house != null) {
-                System.out.println("✅ Found:");
+                System.out.println(" Found:");
                 System.out.println("ID: " + house.getHouseholdId());
                 System.out.println("Name: " + house.getName());
                 System.out.println("Username: " + house.getUsername());
@@ -124,7 +124,7 @@ import Household.Entity.HouseholdEntity;
             }
         }
 
-        // ✅ UPDATE household
+        // UPDATE household
         private void updateHousehold() {
 
             System.out.print("Enter Household ID: ");
@@ -139,13 +139,13 @@ import Household.Entity.HouseholdEntity;
             boolean success = controller.updateHousehold(id, name, username);
 
             if (success) {
-                System.out.println("✅ Household updated successfully!");
+                System.out.println(" Household updated successfully!");
             } else {
                 System.out.println("Update failed (not found).");
             }
         }
 
-        // ✅ DELETE household
+        //  DELETE household
         private void deleteHousehold() {
 
             System.out.print("Enter Household ID: ");
@@ -154,7 +154,7 @@ import Household.Entity.HouseholdEntity;
             boolean success = controller.deleteHousehold(id);
 
             if (success) {
-                System.out.println("✅ Household deleted successfully!");
+                System.out.println(" Household deleted successfully!");
             } else {
                 System.out.println("Delete failed (not found).");
             }

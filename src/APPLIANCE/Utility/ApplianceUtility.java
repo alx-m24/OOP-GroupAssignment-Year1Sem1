@@ -10,6 +10,7 @@ public class ApplianceUtility {
     public static final String LIGHTING = "lighting";
 
 
+
     // STRING VALIDATION
 
     public static boolean isValidString(String input) {
