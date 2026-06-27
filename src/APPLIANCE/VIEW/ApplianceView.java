@@ -3,22 +3,24 @@ package APPLIANCE.VIEW;
 import java.util.List;
 import java.util.Scanner;
 
-import APPLIANCE.CONTROLLER.ApplianceController;
 import APPLIANCE.ENTITY.Appliance;
 import APPLIANCE.ENTITY.CoolingAppliances;
 import APPLIANCE.ENTITY.HeatingAppliance;
 import APPLIANCE.ENTITY.LightAppliance;
-import  APPLIANCE.Utility.ApplianceUtility;
 
+import Household.Controller.HouseholdController;
+import Household.Entity.HouseholdEntity;
 
+import APPLIANCE.Utility.ApplianceUtility;
 
 public class ApplianceView {
 
-    private ApplianceController controller;
+    private HouseholdController controller;
     private Scanner scanner;
 
+
     public ApplianceView() {
-        controller = new ApplianceController();
+        controller = new HouseholdController();
         scanner = new Scanner(System.in);
     }
 
@@ -28,34 +30,26 @@ public class ApplianceView {
         do {
             System.out.println("\n=== Appliance Menu ===");
             System.out.println("1. Add Appliance");
-            System.out.println("2. View All Appliances");
-            System.out.println("3. Search Appliance by Name");
-            System.out.println("4. Update Appliance");
-            System.out.println("5. Delete Appliance");
-            System.out.println("6. Search by Type");
+            System.out.println("2. View Appliances (by Household)");
+            System.out.println("3. Delete Appliance (by Household)");
+            System.out.println("4. Search by Type (by Household)");
             System.out.println("0. Exit");
 
             System.out.print("Enter choice: ");
             choice = scanner.nextInt();
-            scanner.nextLine(); // clear buffer
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
                     addAppliance();
                     break;
                 case 2:
-                    displayAll();
+                    displayAppliances();
                     break;
                 case 3:
-                    searchByName();
-                    break;
-                case 4:
-                    updateAppliance();
-                    break;
-                case 5:
                     deleteAppliance();
                     break;
-                case 6:
+                case 4:
                     searchByType();
                     break;
             }
@@ -63,10 +57,27 @@ public class ApplianceView {
         } while (choice != 0);
     }
 
-    // Add appliance
+    // ✅ ADD appliance
     private void addAppliance() {
+
+        System.out.print("Enter Household ID: ");
+        String householdId = scanner.nextLine();
+
+        if (!ApplianceUtility.isValidString(householdId)) {
+            System.out.println("Invalid household ID!");
+            return;
+        }
+
+        HouseholdEntity household = controller.getHousehold(householdId);
+
+        if (household == null) {
+            System.out.println("Household not found!");
+            return;
+        }
+
         System.out.print("Enter type (heating/cooling/lighting): ");
         String type = scanner.nextLine();
+
 
         System.out.print("Enter name: ");
         String name = scanner.nextLine();
@@ -80,111 +91,127 @@ public class ApplianceView {
 
         Appliance appliance = null;
 
-        if (type.equalsIgnoreCase(ApplianceUtility.HEATING)) {
+        if (ApplianceUtility.HEATING.equalsIgnoreCase(type)) {
             System.out.print("Enter standby loss: ");
             double loss = scanner.nextDouble();
             scanner.nextLine();
             appliance = new HeatingAppliance(name, power, loss);
 
-        }
-        else if (type.equalsIgnoreCase(ApplianceUtility.COOLING)) {
+        } else if (ApplianceUtility.COOLING.equalsIgnoreCase(type)) {
             System.out.print("Enter efficiency rating: ");
             double eff = scanner.nextDouble();
             scanner.nextLine();
             appliance = new CoolingAppliances(name, power, eff);
-        }
-        else if (type.equalsIgnoreCase(ApplianceUtility.LIGHTING)) {
+
+        } else if (ApplianceUtility.LIGHTING.equalsIgnoreCase(type)) {
             System.out.print("Enter quantity: ");
             int qty = scanner.nextInt();
             scanner.nextLine();
             appliance = new LightAppliance(name, power, qty);
+
+        } else {
+            System.out.println("Invalid type!");
+            return;
         }
 
-        if (appliance != null) {
-            appliance.setUsageDuration(duration);
+        appliance.setUsageDuration(duration);
 
-            boolean success = controller.addAppliance(appliance);
+        household.addAppliance(appliance);
 
-            if (success)
-                System.out.println("Appliance added successfully!");
-        }
+        System.out.println("Appliance added!");
+
     }
+    private void displayAppliances() {
 
-    //  View all
-    private void displayAll() {
-        List<Appliance> list = controller.getAllAppliances();
+        System.out.print("Enter Household ID: ");
+        String householdId = scanner.nextLine();
+
+        HouseholdEntity household = controller.getHousehold(householdId);
+
+        if (household == null) {
+            System.out.println("Household not found!");
+            return;
+        }
+
+        List<Appliance> list = household.getAppliances();
+
+        if (list.isEmpty()) {
+            System.out.println("No appliances found.");
+            return;
+        }
 
         for (Appliance app : list) {
             System.out.println(app.getName() +
-                    " | Energy: " + app.calculateEnergyConsumption());
+                    " | Energy: " +
+                  app.calculateEnergyConsumption());
         }
     }
-
-    // Search by name
-    private void searchByName() {
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine();
-
-        Appliance app = controller.getAppliance(name);
-
-        if (app != null)
-            System.out.println("Found: " + app.getName());
-        else
-            System.out.println("Not found");
-    }
-
-    // Update
-    private void updateAppliance() {
-        System.out.print("Enter current name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter new name: ");
-        String newName = scanner.nextLine();
-
-        System.out.print("Enter new power rating: ");
-        double power = scanner.nextDouble();
-
-        System.out.print("Enter new duration: ");
-        double duration = scanner.nextDouble();
-        scanner.nextLine();
-
-        boolean success = controller.updateAppliance(name, newName, power, duration);
-
-        if (success)
-            System.out.println("Updated successfully!");
-        else
-            System.out.println("Update failed!");
-    }
-
-    // Delete
     private void deleteAppliance() {
-        System.out.print("Enter name: ");
+
+        System.out.print("Enter Household ID: ");
+        String householdId = scanner.nextLine();
+
+        HouseholdEntity household = controller.getHousehold(householdId);
+
+        if (household == null) {
+            System.out.println("Household not found!");
+            return;
+        }
+
+        System.out.print("Enter appliance name: ");
         String name = scanner.nextLine();
 
-        boolean success = controller.deleteAppliance(name);
+        boolean removed = controller.removeApplianceFromHousehold(householdId, name);
 
-        if (success)
-            System.out.println("Deleted successfully!");
-        else
-            System.out.println("Delete failed!");
+        if (removed) {
+            System.out.println("Appliance removed successfully!");
+        } else {
+            System.out.println("Appliance not found!");
+        }
     }
-
-    // Search by type
     private void searchByType() {
+
+        System.out.print("Enter Household ID: ");
+        String householdId = scanner.nextLine();
+
+        HouseholdEntity household = controller.getHousehold(householdId);
+
+        if (household == null) {
+            System.out.println("Household not found!");
+            return;
+        }
+
         System.out.print("Enter type (heating/cooling/lighting): ");
         String type = scanner.nextLine();
 
-        List<Appliance> list = controller.getAppliancesByType(type);
+        List<Appliance> list = household.getAppliances();
 
-        if (list != null && !list.isEmpty()) {
-            for (Appliance app : list) {
-                System.out.println(app.getName() +
-                        " | Energy: " + app.calculateEnergyConsumption());
+        boolean found = false;
+
+        for (Appliance app : list) {
+
+            if (ApplianceUtility.HEATING.equalsIgnoreCase(type)
+                    && app instanceof HeatingAppliance) {
+
+                System.out.println(app.getName());
+                found = true;
+
+            } else if (ApplianceUtility.COOLING.equalsIgnoreCase(type)
+                    && app instanceof CoolingAppliances) {
+
+                System.out.println(app.getName());
+                found = true;
+
+            } else if (ApplianceUtility.LIGHTING.equalsIgnoreCase(type)
+                    && app instanceof LightAppliance) {
+
+                System.out.println(app.getName());
+                found = true;
             }
-        } else {
-            System.out.println("No appliances found.");
+        }
+
+        if (!found) {
+            System.out.println("No matching appliances found.");
         }
     }
-
-
 }
