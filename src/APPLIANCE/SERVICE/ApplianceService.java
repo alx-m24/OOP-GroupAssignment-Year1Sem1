@@ -14,15 +14,15 @@ public class ApplianceService {
 
     //Business logic
 
-    public List<Appliance> getAppliancesByType(List<Appliance> appliances, String type) {
-        List<Appliance> result = new ArrayList<>();
+    public ArrayList<Appliance> getAppliancesByType(ArrayList<Appliance> appliances, String type) {
+        ArrayList<Appliance> result = new ArrayList<>();
         type=type.toLowerCase();
 
         for (Appliance app :appliances ) {
             switch (type) {
                 case "cooling":
                     if(app instanceof CoolingAppliances)
-                    result.add(app);
+                        result.add(app);
                 break;
                 case "heating":
                     if(app instanceof HeatingAppliance)

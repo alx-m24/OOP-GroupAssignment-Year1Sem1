@@ -1,6 +1,7 @@
 package Energy.View;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,10 +31,10 @@ public class EnergyView {
 
     private void showTop3All() {
 
-        List<HouseholdEntity> households =
+        ArrayList<HouseholdEntity> households =
                 householdController.getAllHouseholds();
 
-        List<Appliance> list =
+        ArrayList<Appliance> list =
                 controller.getTop3All(households);
 
         for (Appliance app : list) {
@@ -47,7 +48,7 @@ public class EnergyView {
 
     private void viewReports() {
 
-        List<EnergyEntity> list = controller.getAllReports();
+        ArrayList<EnergyEntity> list = controller.getAllReports();
 
         if (list.isEmpty()) {
             System.out.println("No reports available.");

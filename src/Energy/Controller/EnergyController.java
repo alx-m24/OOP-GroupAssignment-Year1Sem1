@@ -1,6 +1,7 @@
 package Energy.Controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Energy.Service.EnergyService;
@@ -29,7 +30,7 @@ public class EnergyController {
     }
 
     //  Get all reports
-    public List<EnergyEntity> getAllReports() {
+    public ArrayList<EnergyEntity> getAllReports() {
         return service.getAllReports();
     }
 
@@ -37,12 +38,12 @@ public class EnergyController {
     //  ANALYSIS FUNCTIONS
 
     // Top 3 appliances for ONE household
-    public List<Appliance> getTop3Household(HouseholdEntity household) {
+    public ArrayList<Appliance> getTop3Household(HouseholdEntity household) {
         return service.getTop3Appliances(household);
     }
 
     // Top 3 appliances across ALL households
-    public List<Appliance> getTop3All(List<HouseholdEntity> households) {
+    public ArrayList<Appliance> getTop3All(ArrayList<HouseholdEntity> households) {
         return service.getTop3All(households);
     }
 
@@ -50,7 +51,7 @@ public class EnergyController {
 
     // ADVICE FUNCTION
 
-    public List<String> generateAdvice(List<Appliance> appliances) {
+    public ArrayList<String> generateAdvice(ArrayList<Appliance> appliances) {
         return service.generateAdvice(appliances);
     }
 }

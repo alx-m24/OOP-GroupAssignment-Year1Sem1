@@ -28,23 +28,15 @@ public class CostController {
 
     private void handleSelectTariff() {
         String type = view.promptTariffType();
-        try {
-            service.selectTariff(type);
-            view.displayMessage("Tariff set to: " + type);
-        } catch (IllegalArgumentException e) {
-            view.displayMessage("Error: " + e.getMessage());
-        }
+        service.selectTariff(type);
+        view.displayMessage("Tariff set to: " + type);
     }
 
     private void handleCalculateCost() {
-        try {
-            double kwh = view.promptKwh();
-            double daily   = service.calculateDailyCost(kwh);
-            double monthly = service.calculateMonthlyCost(kwh);
-            view.displayCostResult(daily, monthly, service.getSelectedTariff());
-        } catch (IllegalStateException e) {
-            view.displayMessage("Please select a tariff first (Option 1).");
-        }
+        double kwh = view.promptKwh();
+        double daily   = service.calculateDailyCost(kwh);
+        double monthly = service.calculateMonthlyCost(kwh);
+        view.displayCostResult(daily, monthly, service.getSelectedTariff());
     }
 
     private void handleCompareTariffs() {

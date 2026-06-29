@@ -1,5 +1,6 @@
 package Household.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Household.Entity.HouseholdEntity;
@@ -32,7 +33,7 @@ public class HouseholdController {
     }
 
     //  Get all households
-    public List<HouseholdEntity> getAllHouseholds() {
+    public ArrayList<HouseholdEntity> getAllHouseholds() {
         return householdService.getAllHouseholds();
     }
 
@@ -76,7 +77,7 @@ public class HouseholdController {
     }
 
     //  Get appliances from household
-    public List<Appliance> getAppliancesFromHousehold(String householdId) {
+    public ArrayList<Appliance> getAppliancesFromHousehold(String householdId) {
 
         HouseholdEntity household = householdService.getHouseholdById(householdId);
 

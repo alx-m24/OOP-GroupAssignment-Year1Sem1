@@ -5,7 +5,14 @@ import Household.Controller.HouseholdController;
 
 import Household.View.Householdview;
 import APPLIANCE.VIEW.ApplianceView;
-import Energy.View.EnergyView;
+import User.Controller.UserController;
+import User.Entity.UserEntity;
+import Household.Controller.HouseholdController;
+import Household.View.Householdview;
+import APPLIANCE.VIEW.ApplianceView;
+import Cost.View.CostView;
+
+import java.util.Scanner;
 
 public class Main {
 
@@ -13,51 +20,79 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        // SHARED controller
-        HouseholdController sharedController = new HouseholdController();
+        // Shared controllers
+        UserController userController         = new UserController();
+        HouseholdController householdController = new HouseholdController();
+        CostView costView                     = new CostView();
 
-        //  PASS SAME controller to ALL views
-        Householdview householdView = new Householdview(sharedController);
-        ApplianceView applianceView = new ApplianceView(sharedController);
-        EnergyView energyView = new EnergyView(sharedController);
-        CostView costView = new CostView();
+        UserEntity loggedInUser = null;
+        boolean appRunning      = true;
 
-        int choice;
+        while (appRunning) {
 
-        do {
-            System.out.println("\n=== MAIN MENU ===");
-            System.out.println("1. MANAGE Household ");
-            System.out.println("2. MANAGE Appliance ");
-            System.out.println("3. Energy Analysis ");
-            System.out.println("4. Cost Module");
-            System.out.println("0. Exit");
+            // --- Login / Register loop ---
+            while (loggedInUser == null) {
+                System.out.println("\n=============================");
+                System.out.println("         WELCOME             ");
+                System.out.println("=============================");
+                System.out.println(" 1. Login");
+                System.out.println(" 2. Register");
+                System.out.println(" 0. Exit App");
+                System.out.println("=============================");
+                System.out.print("Enter choice: ");
 
-            System.out.print("Enter choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
+                int choice;
+                try {
+                    choice = Integer.parseInt(scanner.nextLine().trim());
+                } catch (NumberFormatException e) {
+                    choice = -1;
+                }
 
-            switch (choice) {
-                case 1:
-                    householdView.showMenu();
-                    break;
-                case 2:
-                    applianceView.showMenu();
-                    break;
-                case 3:
-                    energyView.showMenu();
-                    break;
-                case 4:
-                    costView.showMenu();
-                    break;
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter user name: ");
+                        String loginName = scanner.nextLine().trim();
+                        loggedInUser   = userController.getUser(loginName);
+                        if (loggedInUser == null) {
+                            System.out.println("User not found. Try again.");
+                        } else {
+                            System.out.println("Welcome back, " + loggedInUser.getName() + "!");
+                        }
+                        break;
+                    case 2:
+                        System.out.print("Enter name: ");
+                        String newName = scanner.nextLine().trim();
+                        System.out.print("Enter password (min 6 chars): ");
+                        String newPass = scanner.nextLine().trim();
+                        boolean success = userController.addUser(newName, newPass);
+                        if (success) {
+                            System.out.println("Registered! Please login.");
+                        } else {
+                            System.out.println("Failed. ID may already exist or invalid input.");
+                        }
+                        break;
+                    case 0:
+                        appRunning = false;
+                        System.out.println("Goodbye!");
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                }
 
-                case 0:
-                    System.out.println("Exiting...");
-                    break;
-                default:
-                    System.out.println("Invalid choice!");
+                // Exit app from login screen
+                if (!appRunning) break;
             }
 
-        } while (choice != 0);
+            // --- User session loop ---
+            if (loggedInUser != null) {
+                loggedInUser = userController.run(
+                        loggedInUser,
+                        householdController,
+                        costView
+                );
+                // run() returns null on logout, a different user on switch
+            }
+        }
 
         scanner.close();
     }

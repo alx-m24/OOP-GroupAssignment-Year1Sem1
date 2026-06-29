@@ -1,4 +1,5 @@
 package Household.View;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -90,7 +91,7 @@ import Household.Entity.HouseholdEntity;
         //  VIEW ALL households
         private void displayAllHouseholds() {
 
-            List<HouseholdEntity> list = controller.getAllHouseholds();
+            ArrayList<HouseholdEntity> list = controller.getAllHouseholds();
 
             if (list.isEmpty()) {
                 System.out.println("No households found.");

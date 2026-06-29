@@ -1,5 +1,6 @@
 package APPLIANCE.CONTROLLER;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import APPLIANCE.ENTITY.Appliance;
@@ -9,13 +10,13 @@ public class ApplianceController {
 
     private ApplianceService applianceService;
 
-    // ✅ Constructor
+    // Constructor
     public ApplianceController() {
         this.applianceService = new ApplianceService();
     }
 
-    // ✅ Filter appliances by type (MAIN USE CASE)
-    public List<Appliance> getAppliancesByType(List<Appliance> appliances, String type) {
+    // Filter appliances by type (MAIN USE CASE)
+    public ArrayList<Appliance> getAppliancesByType(ArrayList<Appliance> appliances, String type) {
         return applianceService.getAppliancesByType(appliances, type);
     }
 

@@ -21,8 +21,6 @@ public class CostView {
         return promptInt();
     }
 
-    // --- Prompts ---
-
     public String promptTariffType() {
         System.out.println("\nAvailable tariff zones:");
         System.out.println("  [1] City");
@@ -82,20 +80,11 @@ public class CostView {
     // --- Private Helpers ---
 
     private int promptInt() {
-        try {
-            return Integer.parseInt(scanner.nextLine().trim());
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     private double promptDouble() {
-        try {
-            return Double.parseDouble(scanner.nextLine().trim());
-        } catch (NumberFormatException e) {
-            displayMessage("Invalid input. Defaulting to 0.");
-            return 0.0;
-        }
+        return Double.parseDouble(scanner.nextLine().trim());
     }
 
     private int findCheapest(double[] results) {

@@ -8,7 +8,7 @@ import java.util.List;
 public class HouseholdService {
 
         // Stores all households
-        private List<HouseholdEntity> householdList;
+        private ArrayList<HouseholdEntity> householdList;
 
         // Constructor
         public HouseholdService() {
@@ -46,7 +46,7 @@ public class HouseholdService {
             return null;
         }
 
-        public List<HouseholdEntity> getAllHouseholds() {
+        public ArrayList<HouseholdEntity> getAllHouseholds() {
             return new ArrayList<>(householdList); // safe copy
         }
 

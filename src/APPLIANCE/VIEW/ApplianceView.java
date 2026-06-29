@@ -1,5 +1,6 @@
 package APPLIANCE.VIEW;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -135,7 +136,7 @@ public class ApplianceView {
             return;
         }
 
-        List<Appliance> list = household.getAppliances();
+        ArrayList<Appliance> list = household.getAppliances();
 
         if (list.isEmpty()) {
             System.out.println("No appliances found.");
@@ -186,7 +187,7 @@ public class ApplianceView {
         System.out.print("Enter type (heating/cooling/lighting): ");
         String type = scanner.nextLine();
 
-        List<Appliance> list = household.getAppliances();
+        ArrayList<Appliance> list = household.getAppliances();
 
         boolean found = false;
 

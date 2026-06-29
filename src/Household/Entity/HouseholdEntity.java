@@ -10,7 +10,7 @@ public class HouseholdEntity {
         private String householdId;
         private String name;
         private String username;
-        private List<Appliance> appliances;
+        private ArrayList<Appliance> appliances;
 
         // CONSTRUCTOR
 
@@ -34,7 +34,7 @@ public class HouseholdEntity {
             return username;
         }
 
-        public List<Appliance> getAppliances() {
+        public ArrayList<Appliance> getAppliances() {
             return new ArrayList<>(appliances); // safe copy
         }
 
@@ -67,7 +67,7 @@ public class HouseholdEntity {
 
     }
     //Read: read whole array
-    public List<Appliance> getApplianceList(){
+    public ArrayList<Appliance> getApplianceList(){
         return new ArrayList<>(appliances);
     }
 

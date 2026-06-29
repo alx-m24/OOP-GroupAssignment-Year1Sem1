@@ -1,5 +1,6 @@
 package Energy.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import APPLIANCE.ENTITY.Appliance;
@@ -10,15 +11,13 @@ public class EnergyEntity {
     private String reportId;
     private String date;
     private HouseholdEntity household;
-    private List<Appliance> topAppliances;
-    private List<String> advice;
+    private ArrayList<Appliance> topAppliances;
+    private ArrayList<String> advice;
 
     public EnergyEntity(String reportId, String date,
                         HouseholdEntity household,
-                        List<Appliance> topAppliances,
-                        List<String> advice) {
-
-        this.reportId = reportId;
+                        ArrayList<Appliance> topAppliances,
+                        ArrayList<String> advice) {this.reportId = reportId;
         this.date = date;
         this.household = household;
         this.topAppliances = topAppliances;
@@ -37,11 +36,11 @@ public class EnergyEntity {
         return household;
     }
 
-    public List<Appliance> getTopAppliances() {
+    public ArrayList<Appliance> getTopAppliances() {
         return topAppliances;
     }
 
-    public List<String> getAdvice() {
+    public ArrayList<String> getAdvice() {
         return advice;
     }
 }

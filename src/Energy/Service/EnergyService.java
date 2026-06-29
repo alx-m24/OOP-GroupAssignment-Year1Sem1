@@ -11,25 +11,25 @@ import APPLIANCE.Utility.ApplianceUtility;
 
 public class EnergyService {
 
-    private List<EnergyEntity> reports;
+    private ArrayList<EnergyEntity> reports;
 
     public EnergyService() {
         reports = new ArrayList<>();
     }
 
     //  Top 3 for ONE household
-    public List<Appliance> getTop3Appliances(HouseholdEntity household) {
+    public ArrayList<Appliance> getTop3Appliances(HouseholdEntity household) {
 
         List<Appliance> list = household.getAppliances();
 
         list.sort(Comparator.comparingDouble(
                 Appliance::calculateEnergyConsumption).reversed());
 
-        return list.subList(0, Math.min(3, list.size()));
+        return new ArrayList<Appliance>(list.subList(0, Math.min(3, list.size())));
     }
 
     //  Top 3 across ALL households
-    public List<Appliance> getTop3All(List<HouseholdEntity> households) {
+    public ArrayList<Appliance> getTop3All(ArrayList<HouseholdEntity> households) {
 
         List<Appliance> all = new ArrayList<>();
 
@@ -40,13 +40,13 @@ public class EnergyService {
         all.sort(Comparator.comparingDouble(
                 Appliance::calculateEnergyConsumption).reversed());
 
-        return all.subList(0, Math.min(3, all.size()));
+        return new ArrayList<Appliance>(all.subList(0, Math.min(3, all.size())));
     }
 
     // Generate advice
-    public List<String> generateAdvice(List<Appliance> appliances) {
+    public ArrayList<String> generateAdvice(ArrayList<Appliance> appliances) {
 
-        List<String> adviceList = new ArrayList<>();
+        ArrayList<String> adviceList = new ArrayList<>();
 
         for (Appliance app : appliances) {
 
@@ -69,8 +69,8 @@ public class EnergyService {
                                        String date,
                                        HouseholdEntity household) {
 
-        List<Appliance> top3 = getTop3Appliances(household);
-        List<String> advice = generateAdvice(top3);
+        ArrayList<Appliance> top3 = getTop3Appliances(household);
+        ArrayList<String> advice = generateAdvice(top3);
 
         EnergyEntity report =
                 new EnergyEntity(reportId, date, household, top3, advice);
@@ -81,7 +81,7 @@ public class EnergyService {
     }
 
     //  Get all reports
-    public List<EnergyEntity> getAllReports() {
+    public ArrayList<EnergyEntity> getAllReports() {
         return reports;
     }
 }
