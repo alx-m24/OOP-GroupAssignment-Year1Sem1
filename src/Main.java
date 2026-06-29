@@ -52,11 +52,18 @@ public class Main {
                     case 1:
                         System.out.print("Enter user name: ");
                         String loginName = scanner.nextLine().trim();
-                        loggedInUser   = userController.getUser(loginName);
-                        if (loggedInUser == null) {
+                        if (userController.getUser(loginName) == null) {
                             System.out.println("User not found. Try again.");
                         } else {
-                            System.out.println("Welcome back, " + loggedInUser.getName() + "!");
+                            System.out.print("Enter user password: ");
+                            String password = scanner.nextLine().trim();
+                            if (userController.getUser(loginName).getPassword().equals(password)) {
+                                loggedInUser = userController.getUser(loginName);
+                                System.out.println("Welcome back, " + loggedInUser.getName() + "!");
+                            }
+                            else {
+                                System.out.println("Incorrect password");
+                            }
                         }
                         break;
                     case 2:
@@ -90,7 +97,6 @@ public class Main {
                         householdController,
                         costView
                 );
-                // run() returns null on logout, a different user on switch
             }
         }
 
