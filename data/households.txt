@@ -1,0 +1,7 @@
+H_3,U_1,Urban House,CR_0
+H_4,U_1,Beach Cabin,CR_1
+H_5,U_2,Shaafee's Apartment,CR_0
+H_6,U_3,Priya's Condo,CR_2
+H_7,U_3,Family Home,CR_1
+H_8,U_4,Marcus's Flat,CR_0
+H_35,U_1,Rural House,CR_2
