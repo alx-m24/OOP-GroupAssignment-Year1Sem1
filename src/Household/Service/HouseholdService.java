@@ -1,6 +1,7 @@
 package Household.Service;
 
 import Appliance.Entity.ApplianceEntity;
+import Appliance.Entity.LightingAppliance;
 import Appliance.Service.ApplianceService;
 import Household.Entity.HouseholdEntity;
 import Report.Entity.ReportEntity;
@@ -60,6 +61,14 @@ public class HouseholdService {
         return appliance;
     }
 
+    public void addExistingAppliance(HouseholdID householdID, ApplianceEntity appliance) {
+        HouseholdEntity household = findByID(householdID);
+        if (household == null) return;
+
+        applianceService.add(householdID, appliance);
+        household.addAppliance(appliance.getID());
+    }
+
     public void removeAppliance(HouseholdID householdID, ApplianceID applianceID) {
         HouseholdEntity household = findByID(householdID);
         if (household == null) return;
@@ -85,4 +94,5 @@ public class HouseholdService {
     public void load(HouseholdID householdID, UserID ownerID, String name, CostRegionID costRegionID) {
         households.add(new HouseholdEntity(householdID, ownerID, name, costRegionID));
     }
+
 }

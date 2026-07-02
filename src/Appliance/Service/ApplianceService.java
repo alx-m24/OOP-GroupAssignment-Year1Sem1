@@ -45,4 +45,8 @@ public class ApplianceService {
     public void load(ApplianceID applianceID, HouseholdID householdID, String name, Watts watts, Hours hours) {
         appliances.add(new ApplianceEntity(applianceID, householdID, name, hours, watts));
     }
+
+    public void add(HouseholdID householdID, ApplianceEntity appliance) {
+       appliances.add(appliance);
+    }
 }

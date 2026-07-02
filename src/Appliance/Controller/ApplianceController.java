@@ -1,6 +1,9 @@
 package Appliance.Controller;
 
 import Appliance.Entity.ApplianceEntity;
+import Appliance.Entity.CoolingAppliance;
+import Appliance.Entity.HeatingAppliance;
+import Appliance.Entity.LightingAppliance;
 import Appliance.Service.ApplianceService;
 import Appliance.View.ApplianceView;
 import Household.Service.HouseholdService;
@@ -36,12 +39,11 @@ public class ApplianceController {
             default:
                 applianceView.showInvalidChoice();
         }
-        showMenu(householdID); // loop back
+        showMenu(householdID);
     }
 
     public void viewAppliances(HouseholdID householdID) {
         ArrayList<ApplianceEntity> appliances = applianceService.getByHousehold(householdID);
-
         if (appliances.isEmpty()) {
             applianceView.showNoAppliances();
             return;
@@ -50,29 +52,102 @@ public class ApplianceController {
     }
 
     public void addAppliance(HouseholdID householdID) {
-        applianceView.showAddApplianceNamePrompt();
-        String name = scanner.nextLine();
+        applianceView.showApplianceTypeMenu();
+        String typeChoice = scanner.nextLine();
 
-        applianceView.showAddAppliancePowerPrompt();
-        double watts = parseDouble(scanner.nextLine());
+        switch (typeChoice) {
+            case "1": addLighting(householdID); break;
+            case "2": addCooling(householdID); break;
+            case "3": addHeating(householdID); break;
+            case "4": addGeneric(householdID); break;
+            default:
+                applianceView.showInvalidChoice();
+        }
+    }
 
-        applianceView.showAddApplianceUsagePrompt();
-        double hours = parseDouble(scanner.nextLine());
+    private void addGeneric(HouseholdID householdID) {
+        String name = promptName();
+        double watts = promptWatts();
+        double hours = promptHours();
+        if (watts < 0 || hours < 0) { applianceView.showInvalidInput(); return; }
 
-        if (watts < 0 || hours < 0) {
+        ApplianceEntity a = householdService.addAppliance(householdID, name, new Hours(hours), new Watts(watts));
+        applianceView.showAddApplianceSuccess(a);
+    }
+
+    private void addLighting(HouseholdID householdID) {
+        String name = promptName();
+        double watts = promptWatts();
+        double hours = promptHours();
+
+        applianceView.showLightCountPrompt();
+        int lightCount = parseInt(scanner.nextLine());
+
+        applianceView.showEfficiencyPrompt();
+        double efficiency = parseDouble(scanner.nextLine());
+
+        if (watts < 0 || hours < 0 || lightCount < 0 || efficiency < 0) {
             applianceView.showInvalidInput();
             return;
         }
 
-        ApplianceEntity appliance = householdService.addAppliance(
-                householdID, name, new Hours(hours), new Watts(watts)
+        LightingAppliance a = new LightingAppliance(
+                householdID, name, new Hours(hours), new Watts(watts), lightCount, efficiency
         );
-        applianceView.showAddApplianceSuccess(appliance);
+        householdService.addExistingAppliance(householdID, a);
+        applianceView.showAddApplianceSuccess(a);
+    }
+
+    private void addCooling(HouseholdID householdID) {
+        String name = promptName();
+        double watts = promptWatts();
+        double hours = promptHours();
+
+        applianceView.showStandbyPowerPrompt();
+        double standbyWatts = parseDouble(scanner.nextLine());
+
+        applianceView.showStandbyHoursPrompt();
+        double standbyHours = parseDouble(scanner.nextLine());
+
+        if (watts < 0 || hours < 0 || standbyWatts < 0 || standbyHours < 0) {
+            applianceView.showInvalidInput();
+            return;
+        }
+
+        CoolingAppliance a = new CoolingAppliance(
+                householdID, name, new Hours(hours), new Watts(watts),
+                new Watts(standbyWatts), new Hours(standbyHours)
+        );
+        householdService.addExistingAppliance(householdID, a);
+        applianceView.showAddApplianceSuccess(a);
+    }
+
+    private void addHeating(HouseholdID householdID) {
+        String name = promptName();
+        double watts = promptWatts();
+        double hours = promptHours();
+
+        applianceView.showHeatingEfficiencyPrompt();
+        double heatingEfficiency = parseDouble(scanner.nextLine());
+
+        applianceView.showInsulationFactorPrompt();
+        double insulationFactor = parseDouble(scanner.nextLine());
+
+        if (watts < 0 || hours < 0 || heatingEfficiency < 0 || insulationFactor < 0) {
+            applianceView.showInvalidInput();
+            return;
+        }
+
+        HeatingAppliance a = new HeatingAppliance(
+                householdID, name, new Hours(hours), new Watts(watts),
+                heatingEfficiency, insulationFactor
+        );
+        householdService.addExistingAppliance(householdID, a);
+        applianceView.showAddApplianceSuccess(a);
     }
 
     public void removeAppliance(HouseholdID householdID) {
         ArrayList<ApplianceEntity> appliances = applianceService.getByHousehold(householdID);
-
         if (appliances.isEmpty()) {
             applianceView.showNoAppliances();
             return;
@@ -80,24 +155,42 @@ public class ApplianceController {
 
         applianceView.showAppliances(appliances);
         applianceView.showRemoveAppliancePrompt();
-        String input = scanner.nextLine();
 
-        int index = Integer.parseInt(input) - 1;
+        int index = parseInt(scanner.nextLine()) - 1;
         if (index < 0 || index >= appliances.size()) {
             applianceView.showInvalidChoice();
             return;
         }
+
         ApplianceEntity appliance = appliances.get(index);
         householdService.removeAppliance(householdID, appliance.getID());
         applianceView.showRemoveApplianceSuccess(appliance);
     }
 
-    // --- Helper ---
+    // --- Shared prompts ---
+    private String promptName() {
+        applianceView.showAddApplianceNamePrompt();
+        return scanner.nextLine();
+    }
+
+    private double promptWatts() {
+        applianceView.showAddAppliancePowerPrompt();
+        return parseDouble(scanner.nextLine());
+    }
+
+    private double promptHours() {
+        applianceView.showAddApplianceUsagePrompt();
+        return parseDouble(scanner.nextLine());
+    }
+
+    // --- Helpers ---
     private double parseDouble(String input) {
-        try {
-            return Double.parseDouble(input);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+        try { return Double.parseDouble(input); }
+        catch (NumberFormatException e) { return -1; }
+    }
+
+    private int parseInt(String input) {
+        try { return Integer.parseInt(input); }
+        catch (NumberFormatException e) { return -1; }
     }
 }

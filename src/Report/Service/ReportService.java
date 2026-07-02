@@ -25,9 +25,7 @@ public class ReportService {
         KiloWattsHour totalKWh = new KiloWattsHour(0.0);
 
         for (ApplianceEntity appliance : applianceService.getByHousehold(householdID)) {
-            Watts powerRating = appliance.getPowerRating();
-            Hours usage = appliance.getUsage();
-            totalKWh.setValue(totalKWh.getValue() + (powerRating.toKiloWatts().getValue() * usage.getValue()));
+            totalKWh.setValue(totalKWh.getValue() + appliance.getEnergyUsed().getValue());
         }
 
         double totalCost = costRegionService.calculateCostForRegion(costRegionID, totalKWh);

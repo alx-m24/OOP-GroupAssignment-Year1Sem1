@@ -1,6 +1,9 @@
 package Utils.DataManager;
 
 import Appliance.Entity.ApplianceEntity;
+import Appliance.Entity.CoolingAppliance;
+import Appliance.Entity.HeatingAppliance;
+import Appliance.Entity.LightingAppliance;
 import Appliance.Service.ApplianceService;
 import CostRegion.Entity.CostRegionEntity;
 import CostRegion.Service.CostRegionService;
@@ -95,17 +98,29 @@ public class DataManager {
         clearFile(file);
 
         for (ApplianceEntity a : applianceService.getAllAppliances()) {
-            // Format: ID,householdID,name,watts,hours
-            append(file, a.getID().getID() + "," +
+            String base = a.getID().getID() + "," +
                     a.getHouseholdID().getID() + "," +
                     a.getApplianceName() + "," +
                     a.getPowerRating().getValue() + "," +
-                    a.getUsage().getValue());
+                    a.getUsage().getValue();
+
+            if (a instanceof LightingAppliance) {
+                LightingAppliance l = (LightingAppliance) a;
+                append(file, "LIGHT," + base + "," + l.getLightCount() + "," + l.getEfficiencyRating());
+            } else if (a instanceof CoolingAppliance) {
+                CoolingAppliance c = (CoolingAppliance) a;
+                append(file, "COOLING," + base + "," + c.getStandbyPower().getValue() + "," + c.getStandbyHours().getValue());
+            } else if (a instanceof HeatingAppliance) {
+                HeatingAppliance h = (HeatingAppliance) a;
+                append(file, "HEATING," + base + "," + h.getHeatingEfficiency() + "," + h.getInsulationFactor());
+            } else {
+                append(file, "GENERIC," + base);
+            }
         }
     }
 
     private void saveRegions() {
-        // Regions are hardcoded in CostRegionService constructor — nothing to save
+        // Regions are hardcoded in CostRegionService constructor so nothing to save
     }
 
     // -------------------------------------------------------------------------
@@ -176,18 +191,40 @@ public class DataManager {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
-                String[] parts = line.split(",", -1);
+                String[] p = line.split(",", -1);
 
-                int idValue          = parseIDValue(parts[0]);
-                int householdValue   = parseIDValue(parts[1]);
-                String name          = parts[2];
-                double watts         = Double.parseDouble(parts[3]);
-                double hours         = Double.parseDouble(parts[4]);
+                // p[0] = type tag, p[1] = applianceID, p[2] = householdID,
+                // p[3] = name, p[4] = watts, p[5] = hours, p[6]+ = type-specific fields
+                String type        = p[0];
+                ApplianceID aID    = new ApplianceID(parseIDValue(p[1]));
+                HouseholdID hID    = new HouseholdID(parseIDValue(p[2]));
+                String name        = p[3];
+                Watts watts        = new Watts(Double.parseDouble(p[4]));
+                Hours hours        = new Hours(Double.parseDouble(p[5]));
 
-                ApplianceID applianceID   = new ApplianceID(idValue);
-                HouseholdID householdID   = new HouseholdID(householdValue);
+                switch (type) {
+                    case "LIGHT":
+                        int lightCount       = Integer.parseInt(p[6]);
+                        double efficiency    = Double.parseDouble(p[7]);
+                        applianceService.add(hID, new LightingAppliance(aID, hID, name, hours, watts, lightCount, efficiency));
+                        break;
 
-                applianceService.load(applianceID, householdID, name, new Watts(watts), new Hours(hours));
+                    case "COOLING":
+                        Watts standbyPower   = new Watts(Double.parseDouble(p[6]));
+                        Hours standbyHours   = new Hours(Double.parseDouble(p[7]));
+                        applianceService.add(hID, new CoolingAppliance(aID, hID, name, hours, watts, standbyPower, standbyHours));
+                        break;
+
+                    case "HEATING":
+                        double heatingEff    = Double.parseDouble(p[6]);
+                        double insulation    = Double.parseDouble(p[7]);
+                        applianceService.add(hID, new HeatingAppliance(aID, hID, name, hours, watts, heatingEff, insulation));
+                        break;
+
+                    default: // GENERIC
+                        applianceService.load(aID, hID, name, watts, hours);
+                        break;
+                }
             }
         } catch (IOException e) {
             System.out.println("Warning: could not load appliances — " + e.getMessage());

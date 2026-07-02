@@ -1,5 +1,6 @@
 package Household.Controller;
 
+import CostRegion.Controller.CostRegionController;
 import Household.Entity.HouseholdEntity;
 import Household.Service.HouseholdService;
 import Household.View.HouseholdView;
@@ -21,19 +22,19 @@ public class HouseholdController {
         this.householdView = new HouseholdView();
     }
 
-    public void showMenu(UserID userID, CostRegionID costRegionID) {
+    public void showMenu(UserID userID, CostRegionController costRegionController) {
         householdView.showMenu();
         String choice = scanner.nextLine();
 
         switch (choice) {
             case "1": viewHouseholds(userID); break;
-            case "2": addHousehold(userID, costRegionID); break;
+            case "2": addHousehold(userID, costRegionController.pickRegion().getID()); break;
             case "3": removeHousehold(userID); break;
             case "0": return;
             default:
                 householdView.showInvalidChoice();
         }
-        showMenu(userID, costRegionID); // loop back
+        showMenu(userID, costRegionController); // loop back
     }
 
     public void viewHouseholds(UserID userID) {

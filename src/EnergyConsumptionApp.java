@@ -64,8 +64,7 @@ public class EnergyConsumptionApp {
                 case "1":
                     // MainApp resolves region first, then passes it to HouseholdController
                     householdController.showMenu(
-                            currentUser.getID(),
-                            costRegionController.pickRegion().getID()
+                            currentUser.getID(), costRegionController
                     );
                     break;
 
