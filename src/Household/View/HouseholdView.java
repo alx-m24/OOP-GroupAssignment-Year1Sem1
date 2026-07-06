@@ -1,6 +1,8 @@
 package Household.View;
 
+import Appliance.Service.ApplianceService;
 import Household.Entity.HouseholdEntity;
+import Utils.ID.ApplianceID;
 
 import java.util.ArrayList;
 
@@ -14,10 +16,13 @@ public class HouseholdView {
         System.out.print("Choice: ");
     }
 
-    public void showHouseholds(ArrayList<HouseholdEntity> households) {
+    public void showHouseholds(ArrayList<HouseholdEntity> households, ApplianceService applianceService) {
         System.out.println("\n=== My Households ===");
         for (int i = 0; i < households.size(); i++) {
-            System.out.println((i + 1) + ". " + households.get(i));
+            System.out.println((i + 1) + ". " + households.get(i) + ": ");
+            for (ApplianceID aID : households.get(i).getAppliances()) {
+                System.out.println("\t" + applianceService.findByID(aID));
+            }
         }
     }
 

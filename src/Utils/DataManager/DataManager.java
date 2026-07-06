@@ -225,6 +225,8 @@ public class DataManager {
                         applianceService.load(aID, hID, name, watts, hours);
                         break;
                 }
+
+                householdService.findByID(hID).addAppliance(aID);
             }
         } catch (IOException e) {
             System.out.println("Warning: could not load appliances — " + e.getMessage());

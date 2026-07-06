@@ -1,5 +1,6 @@
 package Household.Controller;
 
+import Appliance.Service.ApplianceService;
 import CostRegion.Controller.CostRegionController;
 import Household.Entity.HouseholdEntity;
 import Household.Service.HouseholdService;
@@ -13,11 +14,13 @@ import java.util.Scanner;
 
 public class HouseholdController {
     final private HouseholdService householdService;
+    final private ApplianceService applianceService;
     final private HouseholdView householdView;
     final private Scanner scanner;
 
-    public HouseholdController(HouseholdService householdService, Scanner scanner) {
+    public HouseholdController(HouseholdService householdService, ApplianceService applianceService, Scanner scanner) {
         this.householdService = householdService;
+        this.applianceService = applianceService;
         this.scanner = scanner;
         this.householdView = new HouseholdView();
     }
@@ -43,7 +46,7 @@ public class HouseholdController {
             householdView.showNoHouseholds();
             return;
         }
-        householdView.showHouseholds(households);
+        householdView.showHouseholds(households, applianceService);
     }
 
     public void addHousehold(UserID userID, CostRegionID costRegionID) {
@@ -61,7 +64,7 @@ public class HouseholdController {
             return;
         }
 
-        householdView.showHouseholds(households);
+        householdView.showHouseholds(households, applianceService);
         householdView.showRemoveHouseholdPrompt();
         String input = scanner.nextLine();
 
@@ -87,7 +90,7 @@ public class HouseholdController {
             return null;
         }
 
-        householdView.showHouseholds(households);
+        householdView.showHouseholds(households, applianceService);
         householdView.showSelectHouseholdPrompt();
         String input = scanner.nextLine();
 

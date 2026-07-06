@@ -30,7 +30,7 @@ public class EnergyConsumptionApp {
         // --- Controllers ---
         UserController userController = new UserController(userService, scanner);
         CostRegionController costRegionController = new CostRegionController(costRegionService, scanner);
-        HouseholdController householdController = new HouseholdController(householdService, scanner);
+        HouseholdController householdController = new HouseholdController(householdService, applianceService, scanner);
         ApplianceController applianceController = new ApplianceController(applianceService, householdService, scanner);
         ReportController reportController = new ReportController(householdService, scanner);
 
